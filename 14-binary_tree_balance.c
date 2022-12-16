@@ -1,52 +1,44 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_is_leaf - checks if a node is a leaf
- * @node: pointer to the node to check
+ * binary_tree_height - Measures the height of a binary tree.
+ * @tree: A pointer to the root node of the tree to measure the height.
  *
- * Return: 1 if node is a leaf, and 0 otherwise. If node is NULL, return 0
- */
-int binary_tree_is_leaf(const binary_tree_t *node)
-{
-	if (node != NULL && node->left == NULL && node->right == NULL)
-		return (1);
-	return (0);
-}
-
-/**
- * binary_tree_height - measures the height of a binary tree
- * @tree: pointer to the root node of the tree to measure the height of
- *
- * Return: the height of the tree. If tree is NULL, return 0
+ * Return: If tree is NULL, your function must return 0, else return height.
  */
 size_t binary_tree_height(const binary_tree_t *tree)
 {
-	size_t left, right;
+	size_t left = 0, right = 0;
 
-	if (tree == NULL)
+	if (!tree || (!tree->left && !tree->right))
 		return (0);
-	left = binary_tree_height(tree->left);
-	right = binary_tree_height(tree->right);
-	if (left >= right)
-		return (1 + left);
-	return (1 + right);
+
+	left = 1 + binary_tree_height(tree->left);
+	right = 1 + binary_tree_height(tree->right);
+
+	if (left > right)
+		return (left);
+	return (right);
 }
 
 /**
- * binary_tree_balance - measures the balance factor of a binary tree
- * @tree: pointer to the root node of the tree to measure the balance factor of
+ * binary_tree_balance - Measures the balance factor of a binary tree.
+ * @tree: A pointer to the root node of the tree to measure the balance factor.
  *
- * Description: If tree is NULL, return 0
- *
- * Return: balance factor of a binary tree
+ * Return: If tree is NULL, return 0, else return balance factor.
  */
 int binary_tree_balance(const binary_tree_t *tree)
 {
-	int left, right;
+	size_t left_height = 0, right_height = 0;
 
-	if (tree == NULL)
+	if (!tree)
 		return (0);
-	left = binary_tree_height(tree->left);
-	right = binary_tree_height(tree->right);
-	return (left - right);
+
+	if (tree->left)
+		left_height = 1 + binary_tree_height(tree->left);
+
+	if (tree->right)
+		right_height = 1 + binary_tree_height(tree->right);
+
+	return (left_height - right_height);
 }

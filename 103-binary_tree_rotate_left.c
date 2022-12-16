@@ -1,24 +1,33 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_rotate_left - performs a left-rotation on a binary tree
- * @tree: pointer to the root node of the tree to rotate
+ * binary_tree_rotate_left - finds the lowest common ancestor of two nodes
+ * @tree: a pointer to the first node
  *
- * Return: a pointer to the new root node of the tree once rotated
+ * Return: If no common ancestor was found return NULL
  */
 binary_tree_t *binary_tree_rotate_left(binary_tree_t *tree)
 {
-	if (tree == NULL)
-		return (NULL);
-	tree->parent = tree->right;
-	if (tree->right)
+	binary_tree_t *new_root;
+
+	if (tree == NULL || tree->right == NULL)
+		return (tree);
+
+	new_root = tree->right;
+
+	if (new_root->left)
 	{
-		tree->right = tree->right->left;
-		tree->parent->left = tree;
-		tree->parent->parent = NULL;
-		if (tree->right)
-			tree->right->parent = tree;
-		return (tree->parent);
+		tree->right = new_root->left;
+		new_root->left->parent = tree;
 	}
-	return (tree);
+	else
+	{
+		tree->right = NULL;
+	}
+
+	new_root->left = tree;
+	new_root->parent = tree->parent;
+	tree->parent = new_root;
+
+	return (new_root);
 }
